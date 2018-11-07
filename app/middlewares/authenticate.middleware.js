@@ -2,7 +2,7 @@
 
 var express         = require('express');
 var app             = express();
-var jsonWebToken    = require('jsonWebToken');
+var jsonWebToken    = require('jsonwebtoken');
 
 
 exports.validateToken = (req, res, next) => {
