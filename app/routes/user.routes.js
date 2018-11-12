@@ -5,16 +5,17 @@ module.exports = function(app) {
     var auth = require('./../middlewares/authenticate.middleware')
 
     app.route('/users')
-        .get(users.getAll)
+        .get(users.getAll) //DEBUG ONLY 
         .post(users.insert);
 
     app.route('/users/:userId')
         .get(users.getById)
+        .put(auth.validateToken, users.putById)
         .delete(auth.validateToken, users.deleteById);
 
-    app.route('/users/:userId/subscribe')
-        .get(users.getVitrines);
-    
-    app.route('/users/:userId/subscribe/:vitrineId')
-        .post(auth.validateToken, users.subscribeToVitrine);
+    app.route('/users/:userId/subscriptions')
+        .get(users.getSubscriptions);
+
+    app.route('/users/:userId/likes')
+        .get(users.getLikes);
 };

@@ -1,7 +1,5 @@
 'use strict';
 
-var Picture = require('./user.model');
-
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
