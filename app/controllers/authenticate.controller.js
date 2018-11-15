@@ -5,12 +5,13 @@ var app             = express();
 var jsonwebtoken    = require('jsonwebtoken');
 var bcrypt          = require('bcryptjs');
 
+// Login function
 exports.getJsonWebToken = (req, res) => {
 
     var User = require('../models/user.model');
 
     if(!req.body.email) {
-        return res.status(401).send({ 'success': false, 'message': 'A `username` is required'});
+        return res.status(401).send({ 'success': false, 'message': 'A `email` is required'});
     } 
     else if(!req.body.password) {
         return res.status(401).send({ 'success': false, 'message': 'A `password` is required'});
@@ -30,4 +31,8 @@ exports.getJsonWebToken = (req, res) => {
                 res.send({'token': token});
             });
         }); 
+};
+
+exports.sendOK = (req, res) => {
+    res.status(200).send({'success': true});
 };

@@ -25,16 +25,17 @@ exports.insert = (req, res) => {
 };
 
 exports.getById = (req, res) => {
-    User.findById(req.params.userId, (err, user) => {
+    
+    User.findById(req.params.userId, '-password', (err, user) => {
         if(err)
             res.send(err);
         res.json(user);
-    });
+    })
 };
 
 
 exports.putById = (req, res) => {
-    User.findByIdAndUpdate(req.params.userId)
+    User.findByIdAndUpdate(req.decodedToken._id), req.body
 
     findByIdAndUpdate(
         // the id of the item to find
