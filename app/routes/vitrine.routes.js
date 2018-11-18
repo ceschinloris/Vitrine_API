@@ -10,5 +10,13 @@ module.exports = function(app) {
 
     app.route('/vitrines/:vitrineId')
         .get(vitrines.getById)
+        .put(auth.validateToken, vitrines.putById)
         .delete(auth.validateToken, vitrines.deleteById);
+
+    app.route('/vitrines/:vitrineId/subscribe')
+        .get(vitrines.getSubCount)
+        .post(auth.validateToken, vitrines.subscribeById);
+
+    app.route('/vitrines/:latitude/:longitude')
+        .get(vitrines.getByPosition);
 };
