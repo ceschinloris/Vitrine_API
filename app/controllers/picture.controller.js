@@ -31,6 +31,18 @@ exports.getById = (req, res) => {
     });
 };
 
+exports.deleteById = (req, res) => {
+
+    //TODO: verify that the user is the author or the vitrine admin
+
+    Picture.remove({_id: req.params.pictureId}, (err, picture) => {
+        if(err)
+            res.send(err);
+        res.json({message: 'Picture successfully deleted'});
+    });
+    
+};
+
 exports.getDataById = (req, res) => {
     Picture.findById(req.params.pictureId, (err, picture) => {
         if(err)
@@ -50,14 +62,10 @@ exports.getDataById = (req, res) => {
     });
 }
 
-exports.deleteById = (req, res) => {
+exports.getLikes = (req, res) => {
+    res.status(404).send();
+}; 
 
-    //TODO: verify that the user is the author or the vitrine admin
-
-    Picture.remove({_id: req.params.pictureId}, (err, picture) => {
-        if(err)
-            res.send(err);
-        res.json({message: 'Picture successfully deleted'});
-    });
-    
+exports.likePicture = (req, res) => {
+    res.status(404).send();
 };

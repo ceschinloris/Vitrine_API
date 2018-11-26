@@ -8,7 +8,7 @@ module.exports = function(app) {
     var pictures = require('./../controllers/picture.controller');
 
     app.route('/pictures')
-        .get(pictures.getAll)
+        .get(pictures.getAll) // DEBUG
         .post(auth.validateToken, upload.single('picture'), pictures.insert);
 
     app.route('/pictures/:pictureId')
@@ -17,4 +17,8 @@ module.exports = function(app) {
 
     app.route('/pictures/:pictureId/file')
         .get(pictures.getDataById);
+
+    app.route('/pictures/:pictureId/like')
+        .get(pictures.getLikes)
+        .post(auth.validateToken, pictures.likePicture);
 };
