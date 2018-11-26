@@ -42,12 +42,6 @@ exports.getById = (req, res) => {
     });
 };
 
-// Get the 50 closest vitrines to the position
-// Params: latitude / longitude
-exports.getByPosition = (req, res) => {
-    res.status(404).send();
-};
-
 // -------------
 // Update
 // -------------
@@ -61,11 +55,14 @@ exports.putById = (req, res) => {
 // Delete a vitrine
 // Params: vitrineId
 exports.deleteById = (req, res) => {
-    Vitrine.deleteOne({_id: req.params.vitrineId, admin: req.decodedToken._id}, (err, vitrine) => {
+    Vitrine.findOneAndDelete({_id: req.params.vitrineId, admin: req.decodedToken._id}, (err, vitrine) => {
         if(err)
             res.send(err);
-        //TODO: change res if there is no vitrine corresponding to id and userId
-        res.json({message: 'Vitrine successfully deleted'});
+
+        if(!vitrine)
+            res.json({message: 'No vitrine found with this id and author'});
+        else
+            res.json({message: 'Vitrine successfully deleted'});
     });
 
     // TODO: remove pictures from this vitrine
@@ -73,15 +70,37 @@ exports.deleteById = (req, res) => {
 };
 
 // -------------
-// Other
+// Subscription
 // -------------
 // get subscriber count
 exports.getSubCount = (req, res) => {
     res.status(404).send();
 };
 
-
 // subscribe an user to the vitrine
 exports.subscribeById = (req, res) => {
     res.status(404).send();
 }; 
+
+// -----------
+// Position based functions
+// -----------
+
+// Get the 50 closest vitrines to the position
+// Params: latitude / longitude
+exports.getNearByPosition = (req, res) => {
+    res.status(404).send();
+};
+
+// Get the vitrines containing the position 
+// Params: latitude / longitude
+exports.getByPosition = (req, res) => {
+    res.status(404).send();
+};
+
+//------------
+// Search
+//------------
+exports.search = (req, res) => {
+
+};

@@ -19,4 +19,10 @@ module.exports = function(app) {
 
     app.route('/vitrines/:latitude/:longitude')
         .get(vitrines.getByPosition);
+    
+    app.route('/vitrines/:latitude/:longitude/near')
+        .get(vitrines.getNearByPosition);
+
+    app.route('/vitrines/search/:query')
+        .get(vitrines.search);
 };
