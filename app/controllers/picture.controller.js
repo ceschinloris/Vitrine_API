@@ -3,6 +3,7 @@
 var mongoose    = require('mongoose');
 var fs          = require('fs');
 var Picture     = mongoose.model('Picture');
+var User        = mongoose.model('User');
 
 exports.getAll = (req, res) => {
     Picture.find({}, (err, picture) => {
@@ -16,6 +17,7 @@ exports.insert = (req, res) => {
     var newPicture = new Picture(req.body);
     newPicture.path = req.file.filename;
     newPicture.author = req.decodedToken._id;
+    newPicture.time = Date.now();
     newPicture.save((err, picture) => {
         if(err)
             res.send(err);
@@ -33,9 +35,7 @@ exports.getById = (req, res) => {
 
 exports.deleteById = (req, res) => {
 
-    //TODO: verify that the user is the author or the vitrine admin
-
-    Picture.remove({_id: req.params.pictureId}, (err, picture) => {
+    Picture.findOneAndDelete({_id: req.params.pictureId, author: req.decodedToken._id}, (err, picture) => {
         if(err)
             res.send(err);
         res.json({message: 'Picture successfully deleted'});
@@ -57,15 +57,40 @@ exports.getDataById = (req, res) => {
         
         s.on('error', () => {
             res.set('Content-Type', 'text/plain');
-            res.status(404).end('Not found');
+            res.status(404).send('Not found');
         });
     });
 }
 
 exports.getLikes = (req, res) => {
-    res.status(404).send();
+    
+    User.find({liked: req.params.pictureId}).count(function(err, count){
+        console.log("Number of likes: ", count );
+        res.json(count);
+
+    });
 }; 
 
 exports.likePicture = (req, res) => {
-    res.status(404).send();
+    
+    User.findById(req.decodedToken._id, (err, user) => {
+        if(err)
+            res.send(err);
+
+
+        var index = user.liked.indexOf(req.params.pictureId);
+        if(index > -1)
+            user.liked.splice(index, 1);
+        else
+            user.liked.push(req.params.pictureId);
+
+        user.save(function (err) {
+            if(err)
+                res.send(err);
+            
+            res.status(200).send();
+
+        });
+        
+    });
 };
