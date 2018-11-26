@@ -13,9 +13,18 @@ module.exports = function(app) {
         .put(auth.validateToken, users.putById)
         .delete(auth.validateToken, users.deleteById);
 
+    app.route('/users/:userId/vitrines')
+        .get(auth.validateToken, users.getVitrines);
+    
+    app.route('/users/:userId/pictures')
+        .get(auth.validateToken, users.getPictures);
+
     app.route('/users/:userId/subscriptions')
         .get(users.getSubscriptions);
 
     app.route('/users/:userId/likes')
         .get(users.getLikes);
+
+    app.route('/users/:userID/news')
+        .get(users.getNews);
 };

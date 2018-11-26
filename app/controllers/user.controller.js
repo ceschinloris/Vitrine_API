@@ -67,6 +67,17 @@ exports.deleteById = (req, res) => {
     
 };
 
+
+exports.getVitrines = (req, res) => {
+
+    res.status(404).send();
+};
+
+exports.getPictures = (req, res) => {
+
+    res.status(404).send();
+};
+
 exports.getSubscriptions = (req, res) => {
     User.findById({_id: req.decodedToken._id}, 'subscribed').populate('subscribed').exec((err, vitrines) => {
         if(err)
@@ -83,38 +94,7 @@ exports.getLikes = (req, res) => {
     });
 };
 
-/*
-exports.subscribeToVitrine = (req, res) => {  
+exports.getNews = (req, res) => {
 
-    User.findById(req.decodedToken._id, (err, user) => {
-        if(err)
-            res.send(err);
-        else {
-            console.log('user = ' + user);
-
-            var arrayIndex = user.subscribed.indexOf(req.params.vitrineId);
-            if(arrayIndex >= 0)
-            {
-                console.log('remove index ' + arrayIndex + 'from \n' + user.subscribed);
-                user.subscribed.remove(req.params.vitrineId);
-            }
-            else
-            {
-                console.log('add index ' + req.params.vitrineId);
-                user.subscribed.push(req.params.vitrineId);
-            }
-
-            user.save((err, user) => {
-                if(err)
-                    res.send(err);
-                else {
-                    console.log('user saved = ' + user);
-                    res.json(user);
-                }
-            });
-        }
-
-    });
-
+    res.status(404).send();
 };
-*/
