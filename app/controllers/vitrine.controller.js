@@ -3,6 +3,7 @@
 var mongoose    = require('mongoose');
 var bcrypt      = require('bcryptjs');
 var Vitrine     = mongoose.model('Vitrine');
+var User        = mongoose.model('User');
 
 
 
@@ -74,12 +75,30 @@ exports.deleteById = (req, res) => {
 // -------------
 // get subscriber count
 exports.getSubCount = (req, res) => {
-    res.status(404).send();
+    User.find({subscribed: req.params.vitrineId}).count((err, count) => {
+        res.json(count);
+    });
 };
 
 // subscribe an user to the vitrine
 exports.subscribeById = (req, res) => {
-    res.status(404).send();
+    User.findById(req.decodedToken._id, (err, user) => {
+        if(err)
+            res.send(err);
+
+        var index = user.subscribed.indexOf(req.params.vitrineId);
+        if(index > -1)
+            user.subscribed.splice(index, 1);
+        else
+            user.subscribed.push(req.params.vitrineId);
+
+        user.save((err) => {
+            if(err)
+                res.send(err);
+
+            res.status(200).send();
+        });
+    });
 }; 
 
 // -----------
@@ -102,5 +121,5 @@ exports.getByPosition = (req, res) => {
 // Search
 //------------
 exports.search = (req, res) => {
-
+    Vitrine.find
 };
