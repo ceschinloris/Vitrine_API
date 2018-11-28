@@ -35,9 +35,12 @@ exports.getById = (req, res) => {
 
 exports.deleteById = (req, res) => {
 
-    Picture.findOneAndDelete({_id: req.params.pictureId, author: req.decodedToken._id}, (err, picture) => {
-        if(err)
+    Picture.findOneAndDelete({_id: req.params.pictureId, author: req.decodedToken._id}, (err) => {
+        if(err){
+            console.log('error : findoneanddelete');
             res.send(err);
+        }
+        
         res.json({message: 'Picture successfully deleted'});
     });
     
@@ -64,7 +67,7 @@ exports.getDataById = (req, res) => {
 
 exports.getLikes = (req, res) => {
     
-    User.find({liked: req.params.pictureId}).count(function(err, count){
+    User.find({liked: req.params.pictureId}).count((err, count) => {
         console.log("Number of likes: ", count );
         res.json(count);
 
@@ -84,7 +87,7 @@ exports.likePicture = (req, res) => {
         else
             user.liked.push(req.params.pictureId);
 
-        user.save(function (err) {
+        user.save((err) => {
             if(err)
                 res.send(err);
             
