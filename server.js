@@ -35,6 +35,8 @@ require('./app/routes/user.routes')(app);
 require('./app/routes/vitrine.routes')(app);
 require('./app/routes/picture.routes')(app);
 
+require('./app/temp/temp.routes')(app);
+
 
 // Creating server
 app.listen(port, function () {  
