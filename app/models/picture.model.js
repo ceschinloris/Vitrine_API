@@ -16,7 +16,6 @@ var PictureSchema = new Schema({
 
 
 PictureSchema.post('findOneAndDelete', (pic) => {
-    console.log ('Picture post delete');
 
     // Remove the file
     var picturePath = 'pictures/' + pic.path;
@@ -28,7 +27,29 @@ PictureSchema.post('findOneAndDelete', (pic) => {
     });
     
     // TODO: remove the picture from the user.liked list
-    //User.find({liked: req.params.pictureId});
+    console.log("Removing user likes ...");
+    User.find({liked: pic._id}, (err, users) => {
+        console.log("Find after ")
+        if(err)
+            console.log(err);
+
+        console.log(users);
+        
+        // works until here
+        users.forEach(user => {
+            console.log('%s liked this picture, not anymore', user.email);
+            
+            var index = user.liked.indexOf(pic._id);
+
+            user.liked.splice(index, 1);
+            user.save((err) => {
+                if(err)
+                    console.log(err);
+            });
+            
+        });
+        
+    });
    
     
 });
