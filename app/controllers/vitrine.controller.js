@@ -1,9 +1,13 @@
 'use strict';
 
+
+
 var mongoose    = require('mongoose');
 var bcrypt      = require('bcryptjs');
 var Vitrine     = mongoose.model('Vitrine');
 var User        = mongoose.model('User');
+
+var positionTools = require('../tools/location.tools');
 
 
 
@@ -65,9 +69,7 @@ exports.deleteById = (req, res) => {
         else
             res.json({message: 'Vitrine successfully deleted'});
     });
-
-    // TODO: remove pictures from this vitrine
-    
+   
 };
 
 // -------------
@@ -105,21 +107,53 @@ exports.subscribeById = (req, res) => {
 // Position based functions
 // -----------
 
-// Get the 50 closest vitrines to the position
+// Get the vitrines nearby
 // Params: latitude / longitude
 exports.getNearByPosition = (req, res) => {
-    res.status(404).send();
+    var distance = 1000; // Distance in m
+
+    var lat = req.params.latitude;
+    var long = req.params.longitude;
+
+    var promise = positionTools.getVitrinesNear(lat, long, distance);
+
+    promise.then((vitrines) => {
+        res.json(vitrines);
+    });
+
+
+    
 };
 
 // Get the vitrines containing the position 
 // Params: latitude / longitude
 exports.getByPosition = (req, res) => {
-    res.status(404).send();
+    var distance = 1000; // Distance in m
+
+    var lat = req.params.latitude;
+    var long = req.params.longitude;
+
+    var promise = positionTools.getVitrinesNear(lat, long, distance);
+    promise.then((vitrines) => {
+       
+        var toSend = [];
+
+        vitrines.forEach((vitrine) => {
+            if(positionTools.isInRange(lat, long, vitrine))
+                toSend.push(vitrine);
+        })
+
+        res.json(toSend);
+    })
+
 };
+
 
 //------------
 // Search
 //------------
 exports.search = (req, res) => {
-    Vitrine.find
+    Vitrine.find({name: new RegExp(req.params.query, "i")}, (err, vitrines) => {
+        res.json(vitrines);
+    });
 };
