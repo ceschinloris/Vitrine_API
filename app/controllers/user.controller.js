@@ -3,14 +3,16 @@
 var mongoose    = require('mongoose');
 var bcrypt      = require('bcryptjs');
 var User        = mongoose.model('User');
+var Vitrine     = mongoose.model('Vitrine');
+var Picture     = mongoose.model('Picture');
 
 
 // Debug only
 exports.getAll = (req, res) => {
-    User.find().populate('subscribed').exec((err, user) => {
+    User.find((err, users) => {
         if(err)
             res.send(err);
-        res.json(user)
+        res.json(users)
     });
 };
 
@@ -35,31 +37,17 @@ exports.getById = (req, res) => {
 
 
 exports.putById = (req, res) => {
-    User.findByIdAndUpdate(req.decodedToken._id), req.body
+    User.findByIdAndUpdate(req.decodedToken._id, req.body, {new: true}, (err, user) => {
 
-    findByIdAndUpdate(
-        // the id of the item to find
-        req.params.todoId,
-        
-        // the change to be made. Mongoose will smartly combine your existing 
-        // document with this change, which allows for partial updates too
-        req.body,
-        
-        // an option that asks mongoose to return the updated version 
-        // of the document instead of the pre-updated one.
-        {new: true},
-        
-        // the callback function
-        (err, todo) => {
-        // Handle any possible database errors
-            if (err) return res.status(500).send(err);
-            return res.send(todo);
-        }
-    )
+        if (err) 
+            return res.status(500).send(err);
+
+        return res.json(user);
+    });
 }
 
 exports.deleteById = (req, res) => {
-    User.remove({_id: req.params.userId}, (err, user) => {
+    User.findOneAndDelete({_id: req.params.userId}, (err, user) => {
         if(err)
             res.send(err);
         res.json({message: 'User successfully deleted'});
@@ -69,17 +57,25 @@ exports.deleteById = (req, res) => {
 
 
 exports.getVitrines = (req, res) => {
+    Vitrine.find({admin: req.decodedToken._id}, (err, vitrines) => {
+        if(err)
+            res.send(err);
 
-    res.status(404).send();
+        res.json(vitrines);
+    });
 };
 
 exports.getPictures = (req, res) => {
+    Picture.find({author: req.decodedToken._id}, (err, pictures) => {
+        if(err)
+            res.send(err);
 
-    res.status(404).send();
+        res.json(pictures);
+    });
 };
 
 exports.getSubscriptions = (req, res) => {
-    User.findById({_id: req.decodedToken._id}, 'subscribed').populate('subscribed').exec((err, vitrines) => {
+    User.findById({_id: req.decodedToken._id}, 'subscribed', (err, vitrines) => {
         if(err)
             res.send(err);
         res.json(vitrines);
@@ -87,7 +83,7 @@ exports.getSubscriptions = (req, res) => {
 };
 
 exports.getLikes = (req, res) => {
-    User.findById({_id: req.decodedToken._id}, 'liked').populate('liked').exec((err, pictures) => {
+    User.findById({_id: req.decodedToken._id}, 'liked', (err, pictures) => {
         if(err)
             res.send(err);
         res.json(pictures);

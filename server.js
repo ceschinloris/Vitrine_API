@@ -25,15 +25,15 @@ mongoose.connect(dbConfig.url)
 });
 
 // Models loading
-var User    = require('./app/models/user.model');
-var Vitrine = require('./app/models/vitrine.model');
 var Picture = require('./app/models/picture.model');
+var Vitrine = require('./app/models/vitrine.model');
+var User    = require('./app/models/user.model');
 
 // Routes
-require('./app/routes/authenticate.routes')(app);
-require('./app/routes/user.routes')(app);
-require('./app/routes/vitrine.routes')(app);
 require('./app/routes/picture.routes')(app);
+require('./app/routes/vitrine.routes')(app);
+require('./app/routes/user.routes')(app);
+require('./app/routes/authenticate.routes')(app);
 
 require('./app/temp/temp.routes')(app);
 
