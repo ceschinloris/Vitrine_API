@@ -106,7 +106,14 @@ exports.populate = (req, res) => {
     p4.vitrine = v1._id;
     p4.save();
 
-    
+    // Add subscribers to vitrines
+    v1.subscribers.push(u1);
+    v1.subscribers.push(u2);
+    v1.update();
+
+    v2.subscribers.push(u1);
+    v2.update();
+
     res.send('database populated');
 };
     

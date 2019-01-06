@@ -9,7 +9,7 @@ module.exports = function(app) {
         .post(users.insert);
 
     app.route('/users/:userId')
-        .get(users.getById)
+        .get(auth.validateToken, users.getById)
         .put(auth.validateToken, users.putById)
         .delete(auth.validateToken, users.deleteById);
 
@@ -20,7 +20,7 @@ module.exports = function(app) {
         .get(auth.validateToken, users.getPictures);
 
     app.route('/users/:userId/subscriptions')
-        .get(users.getSubscriptions);
+        .get(auth.validateToken, users.getSubscriptions);
 
     app.route('/users/:userId/likes')
         .get(users.getLikes);

@@ -5,6 +5,7 @@
 var mongoose    = require('mongoose');
 var bcrypt      = require('bcryptjs');
 var Vitrine     = mongoose.model('Vitrine');
+var Picture     = mongoose.model('Picture');
 var User        = mongoose.model('User');
 
 var positionTools = require('../tools/location.tools');
@@ -157,3 +158,12 @@ exports.search = (req, res) => {
         res.json(vitrines);
     });
 };
+
+
+exports.getPictures = (req, res) => {
+    Picture.find({vitrine: req.params.vitrineId}, (err, pictures) => {
+        if(err)
+            res.send(err);
+        res.send(pictures);
+    });
+}

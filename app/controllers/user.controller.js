@@ -75,11 +75,26 @@ exports.getPictures = (req, res) => {
 };
 
 exports.getSubscriptions = (req, res) => {
-    User.findById({_id: req.decodedToken._id}, 'subscribed', (err, vitrines) => {
+    Vitrine.find({subscribers: req.decodedToken._id}, (err, vitrines) => {
         if(err)
-            res.send(err);
+                res.send(err);
+        
+        console.log("user : %s", req.decodedToken._id);
+        console.log("GET SUBSCRIPTIONS : %s", vitrines);
+    
         res.json(vitrines);
     });
+    /*
+    User.findOne({_id: req.decodedToken._id}, 'subscribed')
+        .populate('subscribed')
+        .exec((err, vitrines) => {
+            if(err)
+                res.send(err);
+            console.log("GET SUBSCRIPTIONS : %s", vitrines);
+        
+            res.json(vitrines);
+        });
+        */
 };
 
 exports.getLikes = (req, res) => {

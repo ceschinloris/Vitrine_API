@@ -13,6 +13,9 @@ module.exports = function(app) {
         .put(auth.validateToken, vitrines.putById)
         .delete(auth.validateToken, vitrines.deleteById);
 
+    app.route('/vitrines/:vitrineId/pictures')
+        .get(vitrines.getPictures);
+    
     app.route('/vitrines/:vitrineId/subscribe')
         .get(vitrines.getSubCount)
         .post(auth.validateToken, vitrines.subscribeById);

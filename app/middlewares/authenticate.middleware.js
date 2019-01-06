@@ -6,6 +6,7 @@ var jsonWebToken    = require('jsonwebtoken');
 
 
 exports.validateToken = (req, res, next) => {
+
     var authHeader = req.headers['authorization'];
 
     if(authHeader) {
@@ -24,6 +25,7 @@ exports.validateToken = (req, res, next) => {
         }
     }
     else {
+        console.log("NO HEADER");
         res.status(401).send({'success': false, 'error': 'An authorization header is required'});
     }
 };
